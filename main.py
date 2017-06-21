@@ -1,11 +1,18 @@
 # we import some variable/dictionary from spy_details.py
-from spy_details import spy
+from spy_details import spy,friends
+
+# for date and time
+from datetime import datetime
+
+# for encoding and decoding
+from steganography.steganography import Steganography
+
+# for color the message or text
+from termcolor import colored
 
 # implementing list
 status_message_list=['My name is Mr. ABCD', 'Shaken, not stirred', 'Enf of life']
 
-# implementing empty list and use of dictionary
-friends =[]
 
 print'WELCOME SPY!'
 # backslash is used  for ignoring that next character
@@ -65,7 +72,8 @@ def add_friend():
         'name':'',
         'salutation':'',
         'age':'0',
-        'rating':'0.0'
+        'rating':'0.0',
+        'chats': []
     }
 
     new_friend['name']=raw_input('Please enter others Spy friend name :')
@@ -89,9 +97,44 @@ def select_friend():
         print '%d.%s aged %d with rating of %.2f is online'%(item_number+1,friend['name'],friend['age'],friend['rating'])
         item_number=item_number+1
 
-    friend_selection=raw_input("Choose a friend \n >")
+    friend_selection =raw_input("Choose a friend from list \n >")
     friend_selection_position=int(friend_selection)-1
     return friend_selection_position
+
+
+def send_message():
+    friend_selection =select_friend()
+    original_image=raw_input('What is the name of image? \n >')
+    output_path='output.jpg'
+    text=raw_input('what do you want to encode \n >')
+    Steganography.encode(original_image,output_path,text)
+
+    new_chat={
+        'message':text,
+        'time':datetime.now(),
+        'sent_by_me':True
+    }
+
+    friends[friend_selection]['chats'].append(new_chat)
+    print'Your secret image is ready!'
+
+def read_message():
+    sender=select_friend()
+    output_path=raw_input("What's the name of file?")
+    secret_text=Steganography.decode(output_path)
+
+    new_chat={
+        'message':secret_text,
+        "time":datetime.now(),
+        'sent_by_me':False
+    }
+
+    friends[sender]['chats'].append(new_chat)
+    print'your secret image has been saved'
+
+
+
+
 
 
 # creating function
@@ -110,7 +153,7 @@ def start_chat(spy):
         while show_menu:
             menu_choices='Please select the option \n 1. Add a status to update \n 2. Add a friend \n ' \
                         '3. Select spy friend \n 4. Send Secret Message \n 5.Read a secret Message \n ' \
-                         '6. Read chat from user \n 7. Close Application \n'
+                         '6. Read chat from user \n 7. Close Application \n >'
             menu_choice=raw_input(menu_choices)
 
             if len(menu_choice)>0:
@@ -124,6 +167,11 @@ def start_chat(spy):
                 elif menu_choice==3:
                     index=select_friend()
                     print index
+                elif menu_choice==4:
+                    send_message()
+                elif menu_choice==5:
+                    read_message()
+
 
                 else:
                     show_menu=False
