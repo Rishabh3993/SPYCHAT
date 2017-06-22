@@ -1,13 +1,13 @@
-from spy_details import Spy,spy,friends,chatmessage  # we import some variable/dictionary from spy_details.py
-from datetime import datetime        # for date and time
-from steganography.steganography import Steganography       # for encoding and decoding
-from termcolor import colored,cprint        # for color the message or text
+from spy_details import Spy,spy,friends,chatmessage           # we import some variable/dictionary from spy_details.py
+from datetime import datetime                                 # for date and time
+from steganography.steganography import Steganography         # for encoding and decoding
+from termcolor import colored,cprint                          # for color the message or text
 
 status_message_list = ['My name is Mr. ABCD', 'Shaken, not stirred', 'Enf of life']   # implementing list
 
 
 print'WELCOME SPY!'
-print 'Let\'s get started with your profile'     # backslash is used  for ignoring that next character
+print 'Let\'s get started with your profile'                   # backslash is used  for ignoring that next character
 
 '''
 triple quotes can be used for multiple line commenting
@@ -22,28 +22,25 @@ existing = raw_input(question_continue_or_not)
 def add_status (current_status):
 
     updated_status = None
-# loop for if there is no status means in starting
-    if current_status != None:
+
+    if current_status != None:                                    # loop for if there is no status means in starting
         print'Your current status is %s \n' %(current_status)
     else:
         print"You don't have any status"
 
     default=raw_input("Do you want to select from previous status(Y/N)? :")
 
-# loop for if user select N
-    if default.upper() == 'N':
+    if default.upper() == 'N':                                     # loop for if user select N
         new_status=raw_input('which status you want to set ? :')
 
-        # loop to add new status
-        if len(new_status)>0:
+        if len(new_status)>0:                                      # loop to add new status
             status_message_list.append(new_status)
             updated_status=new_status
 
     elif default.upper()=='Y':
         serial_number=1
 
-# for statement - for showing the list of status
-        for message in status_message_list:
+        for message in status_message_list :              # for statement - for showing the list of status
             print '%d.%s'%(serial_number,message)
             serial_number=serial_number+1
 
@@ -64,8 +61,7 @@ def add_status (current_status):
     return updated_status
 
 
-# making of function to add friend and use of class in it
-def add_friend():
+def add_friend():                                         # making of function to add friend and use of class in it
     new_friend = Spy('','',0,0.0)
 
     new_friend.name = raw_input('Please enter others Spy friend name :')
@@ -121,7 +117,7 @@ def read_message():
     output_path = raw_input("What's the name of file?")
     secret_text = Steganography.decode(output_path)
 
-    new_chat = chatmessage(secret_text,False)
+    new_chat = chatmessage(secret_text, False)
 
     friends[sender].chats.append(new_chat)
     print'your secret image has been saved'
@@ -133,9 +129,14 @@ def read_old_chat():
     print '\n6'
     for chat in friends[read_for].chats:
         if chat.sent_by_me:
-            print'[%s]%s:%s'%(chat.time.strftime('%d,%B,%Y'),'You said:',chat.message)
+            print'[%s]'%(colored(chat.time.strftime('%d,%B,%Y'),'blue'))
+            print'%s %s' %((colored('You said:','red')),chat.message)
+            # print '%s'%(colored((chat.message),'yellow'))
         else:
-            print'[%s]%s:said:%s'%(chat.time.strftime('%d,%B,%Y'),friends[read_for].name,chat.message,)
+            print'[%s]' % (colored(chat.time.strftime('%d,%B,%Y'), 'blue'))
+            print'%s said: %s'% ((colored((friends[read_for].name),'red')),chat.message)
+            # print '%s' % (colored((chat.message), 'yellow'))
+
 
 
 # creating function to start the chat
@@ -151,7 +152,7 @@ def start_chat(spy) :
 
         while show_menu:
             menu_choices = 'Please select the option \n 1. Add a status to update \n 2. Add a friend \n ' \
-                        '3. Select spy friend \n 4. Send Secret Message \n 5.Read a secret Message \n ' \
+                        '3. View spy friend \n 4. Send Secret Message \n 5. Read a secret Message \n ' \
                          '6. Read older chat of user \n 7. Close Application \n >'
             menu_choice = raw_input(menu_choices)
 
